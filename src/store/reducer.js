@@ -23,17 +23,50 @@ const initialViewport = {
   zoom: 4,
 }
 
+const algorithmDefaults = {
+  shortestPath: {
+    showBestPath: true,
+    evaluatingDetailLevel: 1,
+    maxEvaluatingDetailLevel: 1,
+  },
+  twoOpt: {
+    showBestPath: false,
+    evaluatingDetailLevel: 1,
+    maxEvaluatingDetailLevel: 1,
+  },
+  random: {
+    showBestPath: true,
+    evaluatingDetailLevel: 1,
+    maxEvaluatingDetailLevel: 1,
+  },
+  dfs: {
+    evaluatingDetailLevel: 1,
+    maxEvaluatingDetailLevel: 2,
+  },
+  bandb: {
+    evaluatingDetailLevel: 2,
+    maxEvaluatingDetailLevel: 2,
+    showBestPath: false,
+  },
+}
+
 const initialState = {
   points: usTop12.sort(() => Math.random() + 0.5),
   viewport: initialViewport,
   algorithm: "shortestPath",
-  bestPaths: [],
-  bestCost: null,
-  intermediatePaths: [],
-  evaluatingCost: null,
-  delay: 500,
+  delay: 200,
   evaluatingDetailLevel: 1,
+  maxEvaluatingDetailLevel: 1,
+  showBestPath: true,
+
+  bestPath: [],
+  bestDisplaySegments: [],
+  bestCost: null,
+
+  evaluatingPaths: [],
+  evaluatingCost: null,
   running: false,
+  startedRunningAt: null,
 
   pointCount: usTop12.length,
   definingPoints: false,
@@ -48,20 +81,28 @@ export default (state = initialState, action) => {
         viewport: action.viewport,
       }
 
+    case actions.RESET_EVALUATING_STATE:
+      return {
+        ...state,
+        intermediatePaths: [],
+        intermediateCost: null,
+      }
+
+    case actions.RESET_BEST_PATH_STATE:
+      return {
+        ...state,
+        bestPath: [],
+        bestCost: null,
+      }
+
+    //
+    // SOLVER CONTROLS
+    //
     case actions.SET_ALGORITHM:
       return {
         ...state,
         algorithm: action.algorithm,
-        bestPaths: [],
-        bestCost: null,
-        intermediatePaths: [],
-      }
-
-    case actions.SET_BEST_PATHS:
-      return {
-        ...state,
-        bestPaths: action.paths,
-        bestCost: action.cost,
+        ...algorithmDefaults[action.algorithm],
       }
 
     case actions.SET_DELAY:
@@ -74,22 +115,21 @@ export default (state = initialState, action) => {
       return {
         ...state,
         evaluatingDetailLevel: action.level,
-        intermediatePaths: action.level ? state.intermediatePaths : [],
+        evaluatingPaths: action.level ? state.evaluatingPaths : [],
         evaluatingCost: action.level ? state.evaluatingCost : null,
       }
 
-    case actions.SET_INTERMEDIATE_PATHS:
+    case actions.SET_SHOW_BEST_PATH:
       return {
         ...state,
-        intermediatePaths: state.evaluatingDetailLevel ? action.paths : [],
-        evaluatingCost: state.evaluatingDetailLevel ? action.cost : null,
+        showBestPath: action.show,
       }
 
     case actions.START_SOLVING:
       return {
         ...state,
         running: true,
-        bestPaths: [],
+        startedRunningAt: Date.now(),
         pointCount: state.points.length,
       }
 
@@ -97,19 +137,31 @@ export default (state = initialState, action) => {
       return {
         ...state,
         running: false,
-        intermediatePaths: [],
+        startedRunningAt: null,
+        evaluatingPaths: [],
         evaluatingCost: null,
       }
 
-    case actions.RESET:
+    //
+    // SOLVER ACTIONS
+    //
+    case actions.SET_EVALUATING_PATHS:
       return {
         ...state,
-        bestPaths: [],
-        bestCost: null,
-        intermediatePaths: [],
-        evaluatingCost: null,
+        evaluatingPaths: state.evaluatingDetailLevel ? action.paths : [],
+        evaluatingCost: state.evaluatingDetailLevel ? action.cost : null,
       }
 
+    case actions.SET_BEST_PATH:
+      return {
+        ...state,
+        bestPath: action.path,
+        bestCost: action.cost,
+      }
+
+    //
+    // POINT CONTROLS
+    //
     case actions.SET_POINT_COUNT:
       return {
         ...state,
@@ -119,10 +171,6 @@ export default (state = initialState, action) => {
     case actions.SET_POINTS:
       return {
         ...state,
-        bestPaths: [],
-        bestCost: null,
-        intermediatePaths: [],
-        evaluatingCost: null,
         points: action.points,
       }
 
@@ -130,10 +178,6 @@ export default (state = initialState, action) => {
       return {
         ...state,
         points: [],
-        bestPaths: [],
-        bestCost: null,
-        intermediatePaths: [],
-        evaluatingCost: null,
         definingPoints: true,
         pointCount: 0,
       }
@@ -156,10 +200,6 @@ export default (state = initialState, action) => {
         ...state,
         viewport: initialViewport,
         points: usTop12,
-        bestPaths: [],
-        bestCost: null,
-        intermediatePaths: [],
-        evaluatingCost: null,
         pointCount: usTop12.length,
       }
 

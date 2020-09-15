@@ -1,5 +1,6 @@
 import React, { useRef, useEffect, useCallback } from "react"
 import { useSelector, useDispatch } from "react-redux"
+import { Helmet } from "react-helmet"
 import Layout from "../components/Layout"
 import MapPlot from "../components/MapPlot"
 import Menu from "../components/Menu"
@@ -30,9 +31,10 @@ const IndexPage = () => {
   }, [mapRef, dispatch, pointCount, definingPoints])
 
   const start = useCallback(() => {
-    const action = actions.startSolving(points, delay, evaluatingDetailLevel)
-    dispatch(action)
-    solver.postMessage(action)
+    dispatch(actions.startSolving(points, delay, evaluatingDetailLevel))
+    solver.postMessage(
+      actions.startSolvingAction(points, delay, evaluatingDetailLevel)
+    )
   }, [solver, dispatch, delay, points, evaluatingDetailLevel])
 
   const stop = useCallback(() => {
@@ -52,6 +54,7 @@ const IndexPage = () => {
 
   return (
     <Layout>
+      <Helmet title={`tspvis`} />
       <Menu
         onStart={start}
         onStop={stop}
