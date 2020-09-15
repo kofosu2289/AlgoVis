@@ -40,5 +40,5 @@ export const selectPlotIntermediatePaths = createSelector(
 export const selectPlotPaths = createSelector(
   selectPlotBestPath,
   selectPlotIntermediatePaths,
-  (bestPath, intermediatePaths) => [bestPath, ...intermediatePaths]
+  (bestPath, intermediatePaths) => [...intermediatePaths, bestPath]
 )
