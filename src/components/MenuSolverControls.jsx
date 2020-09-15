@@ -74,13 +74,13 @@ const MenuSolverControls = ({ onStart, onStop }) => {
           size="large"
         >
           <Button onClick={onStart} disabled={running || definingPoints}>
-            <FontAwesomeIcon icon={faPlay} />
+            <FontAwesomeIcon icon={faPlay} width="0" />
           </Button>
           <Button onClick={onStop} disabled={!running || definingPoints}>
-            <FontAwesomeIcon icon={faStop} />
+            <FontAwesomeIcon icon={faStop} width="0" />
           </Button>
           <Button onClick={onReset} disabled={running || definingPoints}>
-            <FontAwesomeIcon icon={faRedo} />
+            <FontAwesomeIcon icon={faRedo} width="0" />
           </Button>
         </ButtonGroup>
       </MenuItem>
@@ -122,16 +122,6 @@ const MenuSolverControls = ({ onStart, onStop }) => {
             disabled={definingPoints}
           />
         </Grid>
-        {/* <Slider
-          value={evaluatingDetailLevel}
-          onChange={onEvaluatingDetailLevelChange}
-          step={1}
-          min={0}
-          max={3}
-          valueLabelDisplay="auto"
-          color="secondary"
-          disabled={definingPoints}
-          /> */}
       </MenuItem>
     </MenuSection>
   )
