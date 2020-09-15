@@ -1,7 +1,9 @@
 import React from "react"
 import { makeStyles } from "@material-ui/styles"
 import { Paper, Divider } from "@material-ui/core"
-import MenuControls from "./MenuControls"
+import MenuSolverControls from "./MenuSolverControls"
+import MenuMetrics from "./MenuMetrics"
+import MenuPointControls from "./MenuPointControls"
 
 const useStyles = makeStyles(theme => ({
   wrapper: {
@@ -18,13 +20,16 @@ const useStyles = makeStyles(theme => ({
   },
 }))
 
-const Menu = ({ onStart, onStop }) => {
+const Menu = ({ onStart, onStop, onRandomizePoints }) => {
   const classes = useStyles()
 
   return (
     <Paper classes={{ root: classes.wrapper }}>
-      <MenuControls onStart={onStart} onStop={onStop} />
+      <MenuMetrics />
       <Divider />
+      <MenuSolverControls onStart={onStart} onStop={onStop} />
+      <Divider />
+      <MenuPointControls onRandomizePoints={onRandomizePoints} />
     </Paper>
   )
 }
