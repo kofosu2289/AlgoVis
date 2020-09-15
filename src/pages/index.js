@@ -1,41 +1,27 @@
-import React, { useState, useEffect } from "react"
-import { MarkSeries} from "react-vis"
+import React, { useRef, useReducer } from "react"
 import Layout from "../components/Layout"
-import Plot from "../components/Plot"
+import MapPlot from "../components/MapPlot"
 import Menu from "../components/Menu"
 
-function getRandomInt(min = 0, max = 100) {
-  min = Math.ceil(min)
-  max = Math.floor(max)
-  return Math.floor(Math.random() * (max - min)) + min //The maximum is exclusive and the minimum is inclusive
-}
-
-function randomPoints(count) {
-  return Array.from({ length: count }).map(_ => ({
-    x: getRandomInt(),
-    y: getRandomInt(),
-  }))
-}
+import useSolverWorker from "../hooks/useSolverWorker"
+import StoreProvider from "../store/provider"
+import reducer, { initialState } from "../store/reducer"
 
 const IndexPage = () => {
-  const [data, setData] = useState(randomPoints(10))
+  const [state, dispatch] = useReducer(reducer, initialState)
+  const mapRef = useRef(null)
 
-  useEffect(() => {
-    const to = setInterval(() => {
-      setData(randomPoints(10))
-    }, 1000)
-    return () => {
-      clearInterval(to)
-    }
-  })
+  const { points, algorithm } = state
+
+  const { start } = useSolverWorker(dispatch, algorithm, {})
 
   return (
-    <Layout>
-      <Menu />
-      <Plot>
-        <MarkSeries data={data} />
-      </Plot>
-    </Layout>
+    <StoreProvider.Provider value={{ dispatch, state }}>
+      <Layout>
+        <Menu onStart={() => start(points)} />
+        <MapPlot ref={mapRef} />
+      </Layout>
+    </StoreProvider.Provider>
   )
 }
 

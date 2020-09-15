@@ -13,9 +13,7 @@ const Layout = ({ children }) => {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      <ContentRoot>
-        {children}
-      </ContentRoot>
+      <ContentRoot>{children}</ContentRoot>
     </ThemeProvider>
   )
 }

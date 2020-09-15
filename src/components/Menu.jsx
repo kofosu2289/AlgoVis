@@ -1,50 +1,30 @@
 import React from "react"
 import { makeStyles } from "@material-ui/styles"
-import {
-  Paper,
-  ListItem,
-  ListItemText,
-  Divider,
-} from "@material-ui/core"
-import MenuHeader from "./MenuHeader"
-import MenuMetrics from "./MenuMetrics"
+import { Paper, Divider, Hidden } from "@material-ui/core"
+import MenuControls from "./MenuControls"
 
 const useStyles = makeStyles(theme => ({
   wrapper: {
     overflowY: "auto",
     flex: "0 0 400px",
+    padding: theme.spacing(2),
   },
   [theme.breakpoints.down("sm")]: {
     width: "100%",
   },
 }))
 
-const SideDrawer = ({ }) => {
+const Menu = ({ onStart, onStop }) => {
   const classes = useStyles()
 
   return (
     <Paper classes={{ root: classes.wrapper }}>
-      <MenuHeader />
-      <Divider />
-
-      <MenuMetrics />
-
-      <Divider />
-      <ListItem>
-        <ListItemText>Best: </ListItemText>
-      </ListItem>
-      <ListItem>
-        <ListItemText>Current: </ListItemText>
-      </ListItem>
-
-      <ListItem>
-        <ListItemText>Best: </ListItemText>
-      </ListItem>
-      <ListItem>
-        <ListItemText>Current: </ListItemText>
-      </ListItem>
+      <Hidden mdDown>
+        <MenuControls onStart={onStart} onStop={onStop} />
+        <Divider />
+      </Hidden>
     </Paper>
   )
 }
 
-export default SideDrawer
+export default Menu
