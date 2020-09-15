@@ -1,5 +1,11 @@
 import React from "react"
-import { ButtonGroup, Button, makeStyles } from "@material-ui/core"
+import {
+  ButtonGroup,
+  Button,
+  makeStyles,
+  Typography,
+  Slider,
+} from "@material-ui/core"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faPlay, faStop } from "@fortawesome/free-solid-svg-icons"
 
@@ -9,18 +15,31 @@ const useStyles = makeStyles(theme => ({
   },
 }))
 
-const MenuControls = ({ onStart, onStop }) => {
+const MenuControls = ({ onStart, onStop, delay, onDelayChange }) => {
   const classes = useStyles()
 
   return (
-    <ButtonGroup variant="outlined" classes={{ root: classes.btnsRoot }}>
-      <Button>
-        <FontAwesomeIcon icon={faPlay} onClick={onStart} />
-      </Button>
-      <Button>
-        <FontAwesomeIcon icon={faStop} onClick={onStop} />
-      </Button>
-    </ButtonGroup>
+    <>
+      <ButtonGroup variant="outlined" classes={{ root: classes.btnsRoot }}>
+        <Button onClick={onStart}>
+          <FontAwesomeIcon icon={faPlay} />
+        </Button>
+        <Button onClick={onStop}>
+          <FontAwesomeIcon icon={faStop} />
+        </Button>
+      </ButtonGroup>
+
+      <Typography gutterBottom>Delay</Typography>
+      <Slider
+        value={delay}
+        onChange={onDelayChange}
+        step={1}
+        marks
+        min={0}
+        max={10000}
+        valueLabelDisplay="auto"
+      />
+    </>
   )
 }
 
