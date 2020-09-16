@@ -1,12 +1,16 @@
 /* eslint-disable no-restricted-globals */
 import * as actions from "../store/actions"
 import * as utils from "./utils"
-import { EVALUATING_PATH_COLOR, EVALUATING_SEGMENT_COLOR } from "../constants"
+import {
+  EVALUATING_PATH_COLOR,
+  EVALUATING_ERROR_COLOR,
+  EVALUATING_SEGMENT_COLOR
+} from "../constants"
 
 let DELAY = 0
 let EVALUATING_DETAIL_LEVEL = 0
 
-self.onmessage = function ({ data: action }) {
+self.onmessage = function({ data: action }) {
   switch (action.type) {
     case actions.START_SOLVING:
       DELAY = action.delay
@@ -57,31 +61,49 @@ const dfs = async (points, path = [], visited = null, overallBest = null) => {
   const backToStart = [...path, path[0]]
   const cost = utils.pathCost(backToStart)
 
-  if (EVALUATING_DETAIL_LEVEL > 1 && path.length > 2) {
+  // console.log(overallBest, cost)
+  if (overallBest && cost > overallBest) {
+    // cut this branch
+    if (EVALUATING_DETAIL_LEVEL > 1 && path.length > 2) {
+      self.postMessage(
+        actions.setEvaluatingPaths(
+          [
+            {
+              path: path.slice(0, path.length - 1),
+              color: EVALUATING_SEGMENT_COLOR
+            },
+            {
+              path: path.slice(path.length - 2, path.length + 1),
+              color: EVALUATING_ERROR_COLOR
+            }
+          ],
+          cost
+        )
+      )
+
+      await sleep()
+    }
+
+    return [null, null]
+  } else if (EVALUATING_DETAIL_LEVEL > 1 && path.length > 2) {
     self.postMessage(
       actions.setEvaluatingPaths(
         [
           {
             path: path.slice(0, path.length - 1),
-            color: EVALUATING_SEGMENT_COLOR,
+            color: EVALUATING_SEGMENT_COLOR
           },
           {
             path: path.slice(path.length - 2, path.length + 1),
-            color: EVALUATING_PATH_COLOR,
-          },
+            color: EVALUATING_PATH_COLOR
+          }
         ],
         cost
       )
     )
-    await sleep()
   }
 
-  // console.log(overallBest, cost)
-  if (overallBest && cost > overallBest) {
-    // cut this branch
-    console.log("CUT!!!!", overallBest, cost)
-    return [null, null]
-  }
+  await sleep()
 
   if (available.size === 0) {
     if (EVALUATING_DETAIL_LEVEL) {
@@ -104,7 +126,6 @@ const dfs = async (points, path = [], visited = null, overallBest = null) => {
 
     const [curCost, curPath] = await dfs(points, path, visited, overallBest)
 
-    console.log(curCost)
     if (curCost && (!bestCost || curCost < bestCost)) {
       bestCost = curCost
       bestPath = curPath
@@ -117,6 +138,13 @@ const dfs = async (points, path = [], visited = null, overallBest = null) => {
 
     visited.delete(p)
     path.pop()
+
+    if (EVALUATING_DETAIL_LEVEL > 1) {
+      self.postMessage(
+        actions.setEvaluatingPaths([{ path, color: EVALUATING_SEGMENT_COLOR }])
+      )
+      await sleep()
+    }
   }
 
   await sleep()

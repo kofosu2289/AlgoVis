@@ -6,7 +6,7 @@ import { EVALUATING_PATH_COLOR, EVALUATING_SEGMENT_COLOR } from "../constants"
 let DELAY = 0
 let EVALUATING_DETAIL_LEVEL = 0
 
-self.onmessage = function ({ data: action }) {
+self.onmessage = function({ data: action }) {
   switch (action.type) {
     case actions.START_SOLVING:
       DELAY = action.delay
@@ -45,12 +45,6 @@ const sleep = async () => {
   await utils.sleep(DELAY || 10)
 }
 
-const showEvaluating = (level, path, cost) => {
-  if (EVALUATING_DETAIL_LEVEL >= level) {
-    self.postMessage(actions.setEvaluatingPath(path, cost))
-  }
-}
-
 const dfs = async (points, path = [], visited = null, overallBest = null) => {
   if (visited === null) {
     // initial call
@@ -64,12 +58,12 @@ const dfs = async (points, path = [], visited = null, overallBest = null) => {
       actions.setEvaluatingPaths([
         {
           path: path.slice(0, path.length - 1),
-          color: EVALUATING_SEGMENT_COLOR,
+          color: EVALUATING_SEGMENT_COLOR
         },
         {
           path: path.slice(path.length - 2, path.length + 1),
-          color: EVALUATING_PATH_COLOR,
-        },
+          color: EVALUATING_PATH_COLOR
+        }
       ])
     )
     await sleep()
@@ -112,8 +106,16 @@ const dfs = async (points, path = [], visited = null, overallBest = null) => {
         self.postMessage(actions.setBestPath(bestPath, bestCost))
       }
     }
+
     visited.delete(p)
     path.pop()
+
+    if (EVALUATING_DETAIL_LEVEL > 1) {
+      self.postMessage(
+        actions.setEvaluatingPaths([{ path, color: EVALUATING_SEGMENT_COLOR }])
+      )
+      await sleep()
+    }
   }
 
   return [bestCost, bestPath]
