@@ -13,7 +13,7 @@ const useStyles = makeStyles(theme => ({
     display: "flex",
     flexDirection: "column",
     flexWrap: "nowrap",
-    alginItems: "flex-start",
+    alignItems: "flex-start",
   },
   [theme.breakpoints.down("sm")]: {
     width: "100%",

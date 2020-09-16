@@ -8,7 +8,7 @@ import {
   MenuItem as SelectItem,
   Typography,
   Switch,
-  Grid,
+  Grid
 } from "@material-ui/core"
 import { useDispatch, useSelector } from "react-redux"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
@@ -82,14 +82,38 @@ const MenuSolverControls = ({ onStart, onStop }) => {
           color="secondary"
           size="large"
         >
-          <Button onClick={onStart} disabled={running || definingPoints}>
-            <FontAwesomeIcon icon={faPlay} width="0" />
+          <Button
+            onClick={onStart}
+            disabled={running || definingPoints}
+            classes={{ root: "gtm-start-solving", label: "gtm-start-solving" }}
+          >
+            <FontAwesomeIcon
+              icon={faPlay}
+              width="0"
+              className="gtm-start-solving"
+            />
           </Button>
-          <Button onClick={onStop} disabled={!running || definingPoints}>
-            <FontAwesomeIcon icon={faStop} width="0" />
+          <Button
+            onClick={onStop}
+            disabled={!running || definingPoints}
+            classes={{ root: "gtm-stop-solving", label: "gtm-stop-solving" }}
+          >
+            <FontAwesomeIcon
+              icon={faStop}
+              width="0"
+              className="gtm-stop-solving"
+            />
           </Button>
-          <Button onClick={onReset} disabled={running || definingPoints}>
-            <FontAwesomeIcon icon={faRedo} width="0" />
+          <Button
+            onClick={onReset}
+            disabled={running || definingPoints}
+            classes={{ root: "gtm-reset-paths", label: "gtm-reset-paths" }}
+          >
+            <FontAwesomeIcon
+              icon={faRedo}
+              width="0"
+              className="gtm-reset-paths"
+            />
           </Button>
         </ButtonGroup>
       </MenuItem>
@@ -119,6 +143,7 @@ const MenuSolverControls = ({ onStart, onStop }) => {
             onChange={onShowBestPathChange}
             color="secondary"
             disabled={definingPoints}
+            id="show-best-path"
           />
         </Grid>
 
@@ -133,6 +158,7 @@ const MenuSolverControls = ({ onStart, onStop }) => {
             onChange={onEvaluatingDetailLevelChange(1, 0)}
             color="secondary"
             disabled={definingPoints}
+            id="show-evaluating-paths"
           />
         </Grid>
 
@@ -153,6 +179,7 @@ const MenuSolverControls = ({ onStart, onStop }) => {
                 onChange={onEvaluatingDetailLevelChange(2, 1)}
                 color="secondary"
                 disabled={definingPoints}
+                id="show-evaluating-steps"
               />
             </Grid>
           </>
