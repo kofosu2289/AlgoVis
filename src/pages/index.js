@@ -1,6 +1,6 @@
 import React, { useRef, useEffect, useCallback } from "react"
 import { useSelector, useDispatch } from "react-redux"
-import { Helmet } from "react-helmet"
+import Helmet  from "react-helmet"
 import Layout from "../components/Layout"
 import MapPlot from "../components/MapPlot"
 import Menu from "../components/Menu"
@@ -54,7 +54,7 @@ const IndexPage = () => {
 
   return (
     <Layout>
-      <Helmet title={`tspvis`} />
+      <Helmet title="Traveling Salesperson Algorithm Visualization" />
       <Menu
         onStart={start}
         onStop={stop}
