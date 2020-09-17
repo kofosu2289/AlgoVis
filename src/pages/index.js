@@ -1,6 +1,7 @@
 import React, { useRef, useEffect, useCallback } from "react"
 import { useSelector, useDispatch } from "react-redux"
 import Helmet from "react-helmet"
+import IntroductionModal from '../components/IntroductionModal';
 import Layout from "../components/Layout"
 import MapPlot from "../components/MapPlot"
 import Menu from "../components/Menu"
@@ -50,11 +51,11 @@ const IndexPage = () => {
     solver.postMessage(actions.setEvaluatingDetailLevel(evaluatingDetailLevel))
   }, [evaluatingDetailLevel, solver])
 
-  // useUpdateEffect(onRandomizePoints, [pointCount])
 
   return (
     <Layout>
       <Helmet title="AlgoVis" />
+      <IntroductionModal />
       <Menu
         onStart={start}
         onStop={stop}
