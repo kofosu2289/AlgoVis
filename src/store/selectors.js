@@ -3,10 +3,14 @@ import {
   START_POINT_COLOR,
   POINT_COLOR,
   BEST_PATH_COLOR,
-  EVALUATING_PATH_COLOR,
+  EVALUATING_PATH_COLOR
 } from "../constants"
 
-export const selectViewport = state => state.viewport
+//
+// FOR UI
+//
+export const selectSiteInfoOpen = state => state.siteInfoOpen
+export const selectAlgInfoOpen = state => state.algInfoOpen
 
 //
 //  FOR SOLVER CONTROLS
@@ -25,13 +29,23 @@ export const selectRunning = state => state.running
 export const selectStartedRunningAt = state => state.startedRunningAt
 
 //
-// FOR DISPLAY
+// FOR POINT CONTROLS
 //
+export const selectDefiningPoints = state => state.definingPoints
+
+export const selectPointCount = state => state.pointCount
+
+//
+// FOR PLOT
+//
+
+export const selectViewport = state => state.viewport
+
 export const selectPoints = state => state.points
 export const selectPointsDisplay = createSelector(selectPoints, points =>
   points.map((p, idx) => ({
     position: p,
-    color: idx === 0 ? START_POINT_COLOR : POINT_COLOR,
+    color: idx === 0 ? START_POINT_COLOR : POINT_COLOR
   }))
 )
 
@@ -43,7 +57,7 @@ export const selectBestPathDisplay = createSelector(
   (path, show) => ({
     path: show ? path : [],
     color: BEST_PATH_COLOR,
-    width: 20,
+    width: 20
   })
 )
 
@@ -59,7 +73,7 @@ export const selectEvaluatingPathsDisplay = createSelector(
     paths.map(({ path, color }) => ({
       path,
       color: color || EVALUATING_PATH_COLOR,
-      width: 5,
+      width: 5
     }))
 )
 
@@ -74,10 +88,3 @@ export const selectPlotPaths = createSelector(
   selectEvaluatingPathsDisplay,
   (bestPath, evaluatingPaths) => [...evaluatingPaths, bestPath]
 )
-
-//
-// FOR POINT CONTROLS
-//
-export const selectDefiningPoints = state => state.definingPoints
-
-export const selectPointCount = state => state.pointCount

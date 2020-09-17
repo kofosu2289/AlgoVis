@@ -14,40 +14,40 @@ const usTop12 = [
   [-98.4936282, 29.4241219],
   [-97.7430608, 30.267153],
   [-122.6764816, 45.5230622],
-  [-117.1610838, 32.715738],
+  [-117.1610838, 32.715738]
 ]
 
 const initialViewport = {
   latitude: 39.8097343,
   longitude: -98.5556199,
-  zoom: 4,
+  zoom: 4
 }
 
 const algorithmDefaults = {
   shortestPath: {
     showBestPath: true,
     evaluatingDetailLevel: 1,
-    maxEvaluatingDetailLevel: 1,
+    maxEvaluatingDetailLevel: 1
   },
   twoOpt: {
     showBestPath: false,
     evaluatingDetailLevel: 1,
-    maxEvaluatingDetailLevel: 1,
+    maxEvaluatingDetailLevel: 1
   },
   random: {
     showBestPath: true,
     evaluatingDetailLevel: 1,
-    maxEvaluatingDetailLevel: 1,
+    maxEvaluatingDetailLevel: 1
   },
   dfs: {
     evaluatingDetailLevel: 1,
-    maxEvaluatingDetailLevel: 2,
+    maxEvaluatingDetailLevel: 2
   },
   bandb: {
     evaluatingDetailLevel: 2,
     maxEvaluatingDetailLevel: 2,
-    showBestPath: false,
-  },
+    showBestPath: false
+  }
 }
 
 const initialState = {
@@ -70,29 +70,43 @@ const initialState = {
 
   pointCount: usTop12.length,
   definingPoints: false,
+
+  siteInfoOpen: false,
+  algInfoOpen: false
 }
 
 export default (state = initialState, action) => {
-  // console.log(initialState.points)
   switch (action.type) {
+    case actions.TOGGLE_SITE_INFO_OPEN:
+      return {
+        ...state,
+        siteInfoOpen: !state.siteInfoOpen
+      }
+
+    case actions.TOGGLE_ALG_INFO_OPEN:
+      return {
+        ...state,
+        algInfoOpen: !state.algInfoOpen
+      }
+
     case actions.SET_VIEWPORT_STATE:
       return {
         ...state,
-        viewport: action.viewport,
+        viewport: action.viewport
       }
 
     case actions.RESET_EVALUATING_STATE:
       return {
         ...state,
         intermediatePaths: [],
-        intermediateCost: null,
+        intermediateCost: null
       }
 
     case actions.RESET_BEST_PATH_STATE:
       return {
         ...state,
         bestPath: [],
-        bestCost: null,
+        bestCost: null
       }
 
     //
@@ -102,13 +116,13 @@ export default (state = initialState, action) => {
       return {
         ...state,
         algorithm: action.algorithm,
-        ...algorithmDefaults[action.algorithm],
+        ...algorithmDefaults[action.algorithm]
       }
 
     case actions.SET_DELAY:
       return {
         ...state,
-        delay: action.delay,
+        delay: action.delay
       }
 
     case actions.SET_EVALUATING_DETAIL_LEVEL:
@@ -116,13 +130,13 @@ export default (state = initialState, action) => {
         ...state,
         evaluatingDetailLevel: action.level,
         evaluatingPaths: action.level ? state.evaluatingPaths : [],
-        evaluatingCost: action.level ? state.evaluatingCost : null,
+        evaluatingCost: action.level ? state.evaluatingCost : null
       }
 
     case actions.SET_SHOW_BEST_PATH:
       return {
         ...state,
-        showBestPath: action.show,
+        showBestPath: action.show
       }
 
     case actions.START_SOLVING:
@@ -130,7 +144,7 @@ export default (state = initialState, action) => {
         ...state,
         running: true,
         startedRunningAt: Date.now(),
-        pointCount: state.points.length,
+        pointCount: state.points.length
       }
 
     case actions.STOP_SOLVING:
@@ -139,7 +153,7 @@ export default (state = initialState, action) => {
         running: false,
         startedRunningAt: null,
         evaluatingPaths: [],
-        evaluatingCost: null,
+        evaluatingCost: null
       }
 
     //
@@ -149,14 +163,14 @@ export default (state = initialState, action) => {
       return {
         ...state,
         evaluatingPaths: state.evaluatingDetailLevel ? action.paths : [],
-        evaluatingCost: state.evaluatingDetailLevel ? action.cost : null,
+        evaluatingCost: state.evaluatingDetailLevel ? action.cost : null
       }
 
     case actions.SET_BEST_PATH:
       return {
         ...state,
         bestPath: action.path,
-        bestCost: action.cost,
+        bestCost: action.cost
       }
 
     //
@@ -165,13 +179,14 @@ export default (state = initialState, action) => {
     case actions.SET_POINT_COUNT:
       return {
         ...state,
-        pointCount: action.count,
+        pointCount: action.count
       }
 
     case actions.SET_POINTS:
       return {
         ...state,
-        points: action.points,
+        bestPath: [],
+        points: action.points
       }
 
     case actions.START_DEFINING_POINTS:
@@ -179,20 +194,20 @@ export default (state = initialState, action) => {
         ...state,
         points: [],
         definingPoints: true,
-        pointCount: 0,
+        pointCount: 0
       }
 
     case actions.ADD_DEFINED_POINT:
       return {
         ...state,
         points: [...state.points, action.point],
-        pointCount: state.pointCount + 1,
+        pointCount: state.pointCount + 1
       }
 
     case actions.STOP_DEFINING_POINTS:
       return {
         ...state,
-        definingPoints: false,
+        definingPoints: false
       }
 
     case actions.SET_DEFAULT_MAP:
@@ -200,7 +215,7 @@ export default (state = initialState, action) => {
         ...state,
         viewport: initialViewport,
         points: usTop12,
-        pointCount: usTop12.length,
+        pointCount: usTop12.length
       }
 
     default:

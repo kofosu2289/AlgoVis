@@ -20,41 +20,55 @@ export const SET_POINT_COUNT = "SET_POINT_COUNT"
 export const SET_POINTS = "SET_POINTS"
 export const SET_DEFAULT_MAP = "SET_DEFAULT_MAP"
 
+export const TOGGLE_SITE_INFO_OPEN = "TOGGLE_SITE_INFO_OPEN"
+export const TOGGLE_ALG_INFO_OPEN = "TOGGLE_ALG_INFO_OPEN"
+
 const getRandomPoint = (max, min) => Math.random() * (max - min) + min
+
+//
+// BASIC UI
+//
+export const toggleSiteInfoOpen = () => ({
+  type: TOGGLE_SITE_INFO_OPEN
+})
+
+export const toggleAlgInfoOpen = () => ({
+  type: TOGGLE_ALG_INFO_OPEN
+})
 
 //
 // MAP INTERACTION
 //
 export const setViewportState = viewport => ({
   type: SET_VIEWPORT_STATE,
-  viewport,
+  viewport
 })
 
 //
 // SOLVER CONTROLS
 //
 const resetEvaluatingStateAction = () => ({
-  type: RESET_EVALUATING_STATE,
+  type: RESET_EVALUATING_STATE
 })
 
 const resetBestPathStateAction = () => ({
-  type: RESET_BEST_PATH_STATE,
+  type: RESET_BEST_PATH_STATE
 })
 
 const setAlgorithmAction = algorithm => ({
   type: SET_ALGORITHM,
-  algorithm,
+  algorithm
 })
 
 export const startSolvingAction = (points, delay, evaluatingDetailLevel) => ({
   type: START_SOLVING,
   points,
   delay,
-  evaluatingDetailLevel,
+  evaluatingDetailLevel
 })
 
 export const stopSolvingAction = () => ({
-  type: STOP_SOLVING,
+  type: STOP_SOLVING
 })
 
 export const setAlgorithm = algorithm => dispatch => {
@@ -64,17 +78,17 @@ export const setAlgorithm = algorithm => dispatch => {
 
 export const setDelay = delay => ({
   type: SET_DELAY,
-  delay,
+  delay
 })
 
 export const setEvaluatingDetailLevel = level => ({
   type: SET_EVALUATING_DETAIL_LEVEL,
-  level,
+  level
 })
 
 export const setShowBestPath = show => ({
   type: SET_SHOW_BEST_PATH,
-  show,
+  show
 })
 
 export const resetSolverState = () => dispatch => {
@@ -99,22 +113,22 @@ export const setEvaluatingPath = (path, cost) => ({
   type: SET_EVALUATING_PATHS,
   paths: [
     {
-      path,
-    },
+      path
+    }
   ],
-  cost,
+  cost
 })
 
 export const setEvaluatingPaths = (paths, cost) => ({
   type: SET_EVALUATING_PATHS,
   paths,
-  cost,
+  cost
 })
 
 export const setBestPath = (path, cost) => ({
   type: SET_BEST_PATH,
   path,
-  cost,
+  cost
 })
 
 //
@@ -122,21 +136,21 @@ export const setBestPath = (path, cost) => ({
 //
 
 const setDefaultMapAction = () => ({
-  type: SET_DEFAULT_MAP,
+  type: SET_DEFAULT_MAP
 })
 
 const setPointsAction = points => ({
   type: SET_POINTS,
-  points,
+  points
 })
 
 const setPointCountAction = count => ({
   type: SET_POINT_COUNT,
-  count,
+  count
 })
 
 const startDefiningPointsAction = () => ({
-  type: START_DEFINING_POINTS,
+  type: START_DEFINING_POINTS
 })
 
 export const startDefiningPoints = () => dispatch => {
@@ -146,11 +160,11 @@ export const startDefiningPoints = () => dispatch => {
 
 export const addDefinedPoint = point => ({
   type: ADD_DEFINED_POINT,
-  point,
+  point
 })
 
 export const stopDefiningPoints = () => ({
-  type: STOP_DEFINING_POINTS,
+  type: STOP_DEFINING_POINTS
 })
 
 export const setPointCount = count => dispatch => {
@@ -163,7 +177,7 @@ export const randomizePoints = bounds => (dispatch, getState) => {
   const { top, bottom, left, right } = bounds
   const points = Array.from({ length: pointCount }).map(_ => [
     getRandomPoint(right, left),
-    getRandomPoint(top, bottom),
+    getRandomPoint(top, bottom)
   ])
   dispatch(setPointsAction(points))
 }

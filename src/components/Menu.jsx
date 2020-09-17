@@ -1,6 +1,7 @@
 import React from "react"
 import { makeStyles } from "@material-ui/styles"
 import { Paper, Divider } from "@material-ui/core"
+import MenuHeader from "./MenuHeader"
 import MenuSolverControls from "./MenuSolverControls"
 import MenuMetrics from "./MenuMetrics"
 import MenuPointControls from "./MenuPointControls"
@@ -13,11 +14,11 @@ const useStyles = makeStyles(theme => ({
     display: "flex",
     flexDirection: "column",
     flexWrap: "nowrap",
-    alignItems: "flex-start",
+    alignItems: "flex-start"
   },
   [theme.breakpoints.down("sm")]: {
-    width: "100%",
-  },
+    width: "100%"
+  }
 }))
 
 const Menu = ({ onStart, onStop, onRandomizePoints }) => {
@@ -25,6 +26,8 @@ const Menu = ({ onStart, onStop, onRandomizePoints }) => {
 
   return (
     <Paper classes={{ root: classes.wrapper }}>
+      <MenuHeader />
+      <Divider />
       <MenuMetrics />
       <Divider />
       <MenuSolverControls onStart={onStart} onStop={onStop} />
